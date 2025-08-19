@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+ENV TZ=Asia/Jakarta
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    tzdata curl unzip gnupg wget \
+    chromium chromium-driver \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV CHROME_BINARY=/usr/bin/chromium
+ENV CHROMEDRIVER=/usr/bin/chromedriver
+
+WORKDIR /app
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY main.py ./
+
+CMD ["python", "main.py"]
